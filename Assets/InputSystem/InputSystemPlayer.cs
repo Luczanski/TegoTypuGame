@@ -7,14 +7,39 @@ using UnityEngine.InputSystem;
 public class InputSystemPlayer : MonoBehaviour
 {
     private Rigidbody playerRigidbody;
-    private PlayerInput playerInput;
-    private InputAction moveAction;
+    PlayerInput playerInput;
+   
+   public InputAction moveAction;
+    private InputActionMap Player;
     [SerializeField] private float playerSpeed;
+    
+    //For animations
+     Animator animator;
+     int isWalkingForward;
+     int isWalkingBack;
 
-    private void Start()
+     private void Awake()
+     {
+         playerInput = GetComponent<PlayerInput>();
+         
+         moveAction = playerInput.actions.FindAction("MoveActions");
+         //moveAction = playerInput.currentActionMap.actions;
+         moveAction.performed += ctx => Debug.Log(ctx.ReadValueAsButton());
+
+     }
+
+     private void Start()
     {
-        playerInput = GetComponent<PlayerInput>();
-        moveAction = playerInput.actions.FindAction("Movement");
+       // playerInput = GetComponent<PlayerInput>();
+        //moveAction = playerInput.actions.FindAction("Movement");
+
+       // Player = playerInput.actions.FindActionMap("Player");
+       // moveAction = Player.FindAction("Movement");
+
+        animator = GetComponent<Animator>();
+        isWalkingForward = Animator.StringToHash("isWalkingForward");
+        isWalkingBack = Animator.StringToHash("isWalkingBack");
+        
     }
 
     private void Update()
@@ -24,9 +49,18 @@ public class InputSystemPlayer : MonoBehaviour
 
     void MovePlayer()
     {
-        Vector2 direction = moveAction.ReadValue<Vector2>();
-        transform.position += new Vector3(direction.x, 0, direction.y) * playerSpeed * Time.deltaTime;
+       
+      //  Vector2 direction = moveAction.ReadValue<Vector2>();
+     //   transform.position += new Vector3(direction.x, 0, direction.y) * playerSpeed * Time.deltaTime;
         Debug.Log("move");
+    }
+
+    void handleMovement()
+    {
+        //get parameter values form animator
+        bool isRunningForward = animator.GetBool(isWalkingForward);
+        bool isRunningBack = animator.GetBool(isWalkingBack);
+
     }
     
    
