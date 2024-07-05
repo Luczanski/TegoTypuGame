@@ -8,12 +8,14 @@ public class AnimationController : MonoBehaviour
     private PlayerControls controls;
     private Vector2 moveInput;
     private BruteMovement bruteMovement;
+    private CombatSystem combatSystem;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         controls = new PlayerControls();
         bruteMovement = GetComponent<BruteMovement>();
+        combatSystem = GetComponent<CombatSystem>();
 
         controls.Brute.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         controls.Brute.Move.canceled += ctx => moveInput = Vector2.zero;
@@ -61,5 +63,6 @@ public class AnimationController : MonoBehaviour
     private void HandleAttack()
     {
         animator.SetTrigger("isAttack");
+        combatSystem.Attack(); // Trigger the attack in CombatSystem
     }
 }
